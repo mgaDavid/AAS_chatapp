@@ -13,8 +13,8 @@ public class Program {
 		System.out.print("ENABLE DEBUG MESSAGES? [y/n] => ");
 		String ShowDebug = in.nextLine().toUpperCase();
 		
-		//System.out.print("ENABLE DES ENCRYPTION? [y/n] => ");
-		//String EncryptDES = in.nextLine().toUpperCase();
+		// System.out.print("ENABLE DES ENCRYPTION? [y/n] => ");
+		// String EncryptDES = in.nextLine().toUpperCase();
                 String EncryptDES = "Y";
 		
 		in.close();
