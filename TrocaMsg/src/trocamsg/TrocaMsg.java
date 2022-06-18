@@ -48,14 +48,13 @@ public class TrocaMsg extends Frame {
             public void actionPerformed(ActionEvent x) {
 
                 String[] nickNames = campo_destino.getText().split(";");
-                //String destino = campo_destino.getText();
                 String mensagem = campo_msg.getText();
 
                 for (String destinationNickName : nickNames) {
                     String pin_destino = chamadaWebservice(destinationNickName.trim()).trim();
                     System.out.println("O servidor respondeu à consulta: " + pin_destino);
                     if (pin_destino.contains("Erro")) {
-                        System.out.println("Sinto muito. " + pin_destino);
+                        System.out.println(pin_destino);
                     } else {
                         try {
                             sock.enviaDatagrama(Integer.valueOf(pin_destino), Nickname + " said: " + mensagem, "127.0.0.1");

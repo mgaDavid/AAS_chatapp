@@ -20,7 +20,7 @@ public class NameServerService {
      *
      * @param nick
      * @param pin
-     * @return 
+     * @return
      * @authors David Arco - 30005194, Diego Soares - 30005066
      */
     @GET
@@ -71,7 +71,7 @@ public class NameServerService {
     @Consumes("text/plain")
     @Produces("text/plain")
     public String Register(@QueryParam("nick") String nick, @QueryParam("pin") String pin) {
-        
+
         // Compare PIN with string in database
         Boolean foundPIN = false;
 
@@ -115,12 +115,12 @@ public class NameServerService {
             writeFile = new BufferedWriter(new FileWriter(bindNickFile, true));
             writeFile.append(nickPin + lineBreak);
             writeFile.close();
-            
+
             return "User Registration successful! Please Login.";
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return "Error accessing database.";
     }
 
