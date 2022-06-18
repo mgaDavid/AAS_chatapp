@@ -37,42 +37,7 @@
                             var result = await response.text();
                             var html_result = document.getElementById('result');
                             html_result.innerText = result;
-                        });
-            }
-
-            function login() {
-
-                // Webservice URL
-                var webServiceURL = 'http://192.168.132.120:8080/nameserver/ns/nameserver/login';
-
-                var nickname = document.getElementById('nickname').value;
-                var pin = document.getElementById('pin').value;
-
-                var error = false;
-
-                // Verifications
-                if (nickname === '') {
-                    alert('Nickname field cannot empty.');
-                    error = true;
-                } else if (pin === '') {
-                    alert('PIN field cannot empty.');
-                    error = true;
-                } else if (isNaN(parseInt(pin))) {
-                    alert('PIN can only contain integers.');
-                    error = true;
-                }
-
-                if (error) {
-                    return false;
-                }
-
-                // Webservice call and return
-                var webServiceURLParams = webServiceURL + `?nick=${nickname}&pin=${pin}`;
-                fetch(webServiceURLParams)
-                        .then(async (response) => {
-                            var result = await response.text();
-                            var html_result = document.getElementById('result');
-                            html_result.innerText = "Welcome!";
+                            alert(result);
                         });
             }
 
@@ -87,7 +52,7 @@
 
                 // Verifications
                 if (nickname === '') {
-                    alert('Nickname field cannot empty.');
+                    alert('Nickname field cannot be empty.');
                     error = true;
                 }
 
@@ -114,7 +79,6 @@
             <p>PIN:</p>
             <input type="text" id="pin"/>
             <br/><br/>
-            <button type="button" onclick="login()">Login</button>
             <button type="button" onclick="register()">Register</button>
             <button type="button" onclick="forgotPIN()">Forgot PIN</button>
             <p id="result"></p>

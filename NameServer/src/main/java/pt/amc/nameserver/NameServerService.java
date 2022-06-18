@@ -71,6 +71,33 @@ public class NameServerService {
     @Consumes("text/plain")
     @Produces("text/plain")
     public String Register(@QueryParam("nick") String nick, @QueryParam("pin") String pin) {
+        
+        // Compare PIN with string in database
+        Boolean foundPIN = false;
+
+        BufferedReader readFile;
+        try {
+            String fileName = "/srv/nameserver/bindNick.txt";
+            File bindNickFile = new File(fileName);
+            System.out.println("File " + fileName + " is located in: " + bindNickFile.getAbsolutePath());
+
+            readFile = new BufferedReader(new FileReader(bindNickFile));
+            String fileLine = readFile.readLine();
+
+            while (fileLine != null && foundPIN == false) {
+                if (fileLine.contains(pin)) {
+                    foundPIN = true;
+                }
+                fileLine = readFile.readLine();
+            }
+            readFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (foundPIN == true) {
+            return "ERROR: PIN/port already in use!";
+        }
 
         // Creates a key that contains "nick" and "pin"
         String nickPin = nick + "," + pin;
@@ -88,11 +115,13 @@ public class NameServerService {
             writeFile = new BufferedWriter(new FileWriter(bindNickFile, true));
             writeFile.append(nickPin + lineBreak);
             writeFile.close();
+            
+            return "User Registration successful! Please Login.";
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return "User Registration successful! Please Login.";
+        
+        return "Error accessing database.";
     }
 
     @GET
