@@ -1,6 +1,5 @@
 package trocamsg;
 
-import java.util.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -20,7 +19,7 @@ public class TrocaMsg extends Frame {
     Datagrama sock;
 
     String Nickname;
-    Integer PIN;
+    private Integer PIN;
 
     public TrocaMsg(String Nickname, Integer PIN) {
         super(Nickname);

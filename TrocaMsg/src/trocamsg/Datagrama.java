@@ -40,15 +40,9 @@ public class Datagrama extends Thread {
             DatagramPacket DatagramPacket = new DatagramPacket(Buffer, Buffer.length);
             DatagramSocket.receive(DatagramPacket);
             Sender = DatagramPacket.getAddress();
-            String Sender_IP = Sender.toString().substring(1);
-            Integer Port = DatagramPacket.getPort();
-
-            String Message = null;
-            //Message = new String(DatagramPacket.getData(), 0, DatagramPacket.getLength());
-            //NEW
 
             byte[] decrypted = this.decryptDES(DatagramPacket.getData());
-            Message = new String(decrypted);
+            String Message = new String(decrypted);
             System.out.println(Message);
 
             chat.ecra_mostra_msg.append(Message);
@@ -65,8 +59,7 @@ public class Datagrama extends Thread {
             byte[] MessageBytes = Message.getBytes();
             Destination = InetAddress.getByName(Recipient);
 
-            //NEW
-            byte[] clearBytes = null;
+            byte[] clearBytes;
             if (Buffer.length - MessageBytes.length > 0) {
                 clearBytes = new byte[Buffer.length - MessageBytes.length];
             } else {
