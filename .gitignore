@@ -25,3 +25,4 @@ hs_err_pid*
 /nameserver_backup/target/
 /NameServer/nbproject/private/
 /NameServer/build/
+/NameServer/nbproject/
