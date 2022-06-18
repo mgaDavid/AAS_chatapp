@@ -5,14 +5,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
 
 @Path("/nameserver")
 public class NameServerService {
@@ -20,6 +18,9 @@ public class NameServerService {
     /**
      * Name Server Webservice
      *
+     * @param nick
+     * @param pin
+     * @return 
      * @authors David Arco - 30005194, Diego Soares - 30005066
      */
     @GET
@@ -36,13 +37,13 @@ public class NameServerService {
         Boolean foundNickPin = false;
 
         BufferedReader fileRead;
+
+        // Directory /srv/nameserver/
+        String fileName = "/srv/nameserver/bindNick.txt";
+        File bindNickFile = new File(fileName);
+        System.out.println("File " + fileName + " is located in: " + bindNickFile.getAbsolutePath());
+
         try {
-
-            // Directory /srv/nameserver/
-            String fileName = "/srv/nameserver/bindNick.txt";
-            File bindNickFile = new File(fileName);
-            System.out.println("File " + fileName + " is located in: " + bindNickFile.getAbsolutePath());
-
             fileRead = new BufferedReader(new FileReader(bindNickFile));
             String readFileLine = fileRead.readLine();
 
@@ -54,7 +55,7 @@ public class NameServerService {
                 readFileLine = fileRead.readLine();
             }
             fileRead.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -87,7 +88,7 @@ public class NameServerService {
             writeFile = new BufferedWriter(new FileWriter(bindNickFile, true));
             writeFile.append(nickPin + lineBreak);
             writeFile.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -124,7 +125,7 @@ public class NameServerService {
                 fileLine = readFile.readLine();
             }
             readFile.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
