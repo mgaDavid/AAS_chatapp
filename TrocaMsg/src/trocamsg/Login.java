@@ -35,7 +35,7 @@ public class Login extends Frame {
         String url_montada = webservice + "?nick=" + nick + "&pin=" + pin;
         String resultado = "";
 
-        // Inicia 1ª conexão com web-service para fazer login
+        // Starts the connection with the web-service
         HttpURLConnection con = null;
         try {
             URL obj = new URL(url_montada);
@@ -56,7 +56,7 @@ public class Login extends Frame {
             System.exit(1);
         }
 
-        // Valida a resposta do web-service. Se "OK", então inicia a instância de chat.
+        // Validate the user credentials, if it is ok then runs the chat application
         if (resultado.contains("OK")) {
             TrocaMsg chat = new TrocaMsg(nick, Integer.valueOf(pin));
             this.setVisible(false);
@@ -67,18 +67,18 @@ public class Login extends Frame {
     }
 
     public void setActionListeners() {
-        // THE ACTION LISTENERS FOR THIS COMPONENT ARE RATHER COMPLEX.
-        // THERE ARE 3 BUTTONS, SO 3 ACTION LISTENERS ARE NEEDED
         this.Component_Login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent x) {
                 String Nickname = Component_Nickname.getText();
                 String PIN = Component_PIN.getText();
 
-                if (PIN.matches("[0-9]+") == true) {
-                    sendRequest(Nickname, PIN);
+                if (Nickname.length() == 0) {
+                    Component_Title_Label.setText("Nickname cannot be empty.");
+                } else if (PIN.length() != 4 || PIN.matches("[0-9]+") || Integer.valueOf(PIN) < 8000 || Integer.valueOf(PIN) > 8010) {
+                    Component_Title_Label.setText("PIN must be a number in range [8000; 8010].");
                 } else {
-                    Component_Title_Label.setText("PIN can only contain numbers.");
+                    sendRequest(Nickname, PIN);
                 }
 
             }
@@ -86,7 +86,7 @@ public class Login extends Frame {
 
     }
 
-    // TRICK TO HAVE PERFECTLY ALIGNED PANELS, WITH COMPLEX COLUMNS AND LINES
+    // ALIGN PANELS, WITH COMPLEX COLUMNS AND LINES
     public Panel GUI_setFieldsPanel() {
         Panel NicknamePanel = new Panel();
         NicknamePanel.setLayout(new BorderLayout(5, 5));
@@ -111,7 +111,7 @@ public class Login extends Frame {
         Buttons.add("West", Component_Login);
         return Buttons;
     }
-    // TRICK TO HAVE PERFECTLY ALIGNED PANELS, WITH COMPLEX COLUMNS AND LINES
+    // ALIGN PANELS, WITH COMPLEX COLUMNS AND LINES
 
     public void GUI() {
         setBackground(Color.lightGray);
