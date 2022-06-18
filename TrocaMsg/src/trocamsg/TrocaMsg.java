@@ -47,24 +47,29 @@ public class TrocaMsg extends Frame {
         this.botao_envia.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent x) {
-                String destino = campo_destino.getText();
+
+                String[] nickNames = campo_destino.getText().split(";");
+                //String destino = campo_destino.getText();
                 String mensagem = campo_msg.getText();
-                
-                String pin_destino = chamadaWebservice(destino).trim();
-                System.out.println("O servidor respondeu à consulta: " + pin_destino);
-                if(pin_destino.contains("Erro")){
-                    System.out.println("Sinto muito. " + pin_destino);
-                } else {
-                    try{
-                        sock.enviaDatagrama(Integer.valueOf(pin_destino), Nickname + " disse: " + mensagem, "127.0.0.1");
-                    } catch (Exception e){
-                        e.printStackTrace();
+
+                for (String destinationNickName : nickNames) {
+                    String pin_destino = chamadaWebservice(destinationNickName.trim()).trim();
+                    System.out.println("O servidor respondeu à consulta: " + pin_destino);
+                    if (pin_destino.contains("Erro")) {
+                        System.out.println("Sinto muito. " + pin_destino);
+                    } else {
+                        try {
+                            sock.enviaDatagrama(Integer.valueOf(pin_destino), Nickname + " said: " + mensagem, "127.0.0.1");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                }		
+                }
+
             }
         });
     }
-    
+
     public void GUI() {
         setBackground(Color.lightGray);
         ecra_mostra_msg.setEditable(false);
@@ -81,21 +86,16 @@ public class TrocaMsg extends Frame {
         GBL.setConstraints(P1, P1C);
         add(P1);
     }
-    
-    
-    
-    
-    
 
-    public String chamadaWebservice(String destino){
+    public String chamadaWebservice(String destino) {
         // Construir URL para fazer a chamada ao web service
         // Não esquecer de alterar para o IP:PORT do Cluster, após deploy do Name Server! 
-        
+
         // Ao fornecer um NICKNAME, o servidor deve responder com um PIN (se existir)
         String webservice = "http://192.168.132.120:8080/nameserver/ns/nameserver/forgotpin";
         String url_montada = webservice + "?nick=" + destino;
         String resultado = "";
-        
+
         HttpURLConnection con = null;
         try {
             URL obj = new URL(url_montada);
@@ -114,8 +114,8 @@ public class TrocaMsg extends Frame {
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
-        }        
-        return resultado;        
+        }
+        return resultado;
     }
-    
+
 }

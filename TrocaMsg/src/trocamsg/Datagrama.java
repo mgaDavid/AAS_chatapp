@@ -7,7 +7,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
 public class Datagrama extends Thread {
-    
+
     private static final String palavra_passe = "ea6bdcc2c378";
     private static SecretKey chave_secreta;
 
@@ -16,7 +16,7 @@ public class Datagrama extends Thread {
     DatagramSocket DatagramSocket;
     byte[] Buffer = new byte[1024];
 
-    TrocaMsg chat;	
+    TrocaMsg chat;
     Integer port_number = null;
 
     public Datagrama(Integer port_number) {
@@ -30,7 +30,7 @@ public class Datagrama extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        while(true) {
+        while (true) {
             recebeDatagrama();
         }
     }
@@ -42,12 +42,17 @@ public class Datagrama extends Thread {
             Sender = DatagramPacket.getAddress();
             String Sender_IP = Sender.toString().substring(1);
             Integer Port = DatagramPacket.getPort();
-            String Message = new String(DatagramPacket.getData(), 0, DatagramPacket.getLength());
+
+            String Message = null;
+            //Message = new String(DatagramPacket.getData(), 0, DatagramPacket.getLength());
             //NEW
+
             byte[] decrypted = this.decryptDES(DatagramPacket.getData());
             Message = new String(decrypted);
             System.out.println(Message);
-            chat.ecra_mostra_msg.append(Message + "\n");
+
+            chat.ecra_mostra_msg.append(Message);
+            chat.ecra_mostra_msg.append("\n");
         } catch (Exception e) {
             System.out.println("Erro ao tentar receber datagrama.");
             e.printStackTrace();
@@ -59,16 +64,20 @@ public class Datagrama extends Thread {
         try {
             byte[] MessageBytes = Message.getBytes();
             Destination = InetAddress.getByName(Recipient);
+
             //NEW
-            byte[] clearBytes = null; 
-            if(Buffer.length - MessageBytes.length > 0) {
+            byte[] clearBytes = null;
+            if (Buffer.length - MessageBytes.length > 0) {
                 clearBytes = new byte[Buffer.length - MessageBytes.length];
             } else {
                 clearBytes = new byte[0];
             }
             byte[] finalArray = new byte[MessageBytes.length + clearBytes.length];
+            System.arraycopy(MessageBytes, 0, finalArray, 0, MessageBytes.length);
+            System.arraycopy(clearBytes, 0, finalArray, MessageBytes.length, clearBytes.length);
             MessageBytes = this.encryptDES(finalArray);
             System.out.println(MessageBytes);
+
             DatagramPacket DatagramPacket = new DatagramPacket(MessageBytes, MessageBytes.length, Destination, Port);
             DatagramSocket.send(DatagramPacket);
         } catch (Exception e) {
@@ -76,13 +85,11 @@ public class Datagrama extends Thread {
             e.printStackTrace();
         }
     }
-    
+
     // A implementação do DES não está terminada.
     // Falta chamar o encryptDES() no método enviaDatagrama()
     // E, por semelhança, falta chamar decryptDES() no recebeDatagrama()
     // Isto é, cifrar a mensagem ao enviar, decifrar a mensagem ao receber
-
-    
     private void setSecretKey(String Key) throws Exception {
         byte key[] = Key.getBytes("UTF8");
         DESKeySpec desKeySpec = new DESKeySpec(key);
