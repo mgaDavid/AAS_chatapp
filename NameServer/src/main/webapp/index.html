@@ -66,7 +66,14 @@
                         .then(async (response) => {
                             var result = await response.text();
                             var html_result = document.getElementById('result');
-                            html_result.innerText = "Your PIN is: " + result;
+                            var returnMessage = '';
+                            
+                            if (result.toUpperCase().includes("ERROR")) {
+                                returnMessage = result;
+                            } else {
+                                returnMessage = 'Your PIN is: ' + result;
+                            }
+                            html_result.innerText = returnMessage;
                         });
             }
 
