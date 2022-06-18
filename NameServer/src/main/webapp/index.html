@@ -25,6 +25,9 @@
                 } else if (isNaN(parseInt(pin))) {
                     alert('PIN can only contain integers.');
                     error = true;
+                } else if (parseInt(pin) < 8000 || parseInt(pin) > 8010) {
+                    alert('PIN should be in range [8000; 8010].');
+                    error = true;
                 }
                 if (error) {
                     return false;
@@ -67,8 +70,8 @@
                             var result = await response.text();
                             var html_result = document.getElementById('result');
                             var returnMessage = '';
-                            
-                            if (result.toUpperCase().includes("ERROR")) {
+
+                            if (result.toUpperCase().includes('ERROR')) {
                                 returnMessage = result;
                             } else {
                                 returnMessage = 'Your PIN is: ' + result;
