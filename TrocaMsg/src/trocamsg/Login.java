@@ -75,7 +75,7 @@ public class Login extends Frame {
 
                 if (Nickname.length() == 0) {
                     Component_Title_Label.setText("Nickname cannot be empty.");
-                } else if (PIN.length() != 4 || PIN.matches("[0-9]+") || Integer.valueOf(PIN) < 8000 || Integer.valueOf(PIN) > 8010) {
+                } else if (PIN.length() != 4 || PIN.matches("[0-9]+") != true || Integer.valueOf(PIN) < 8000 || Integer.valueOf(PIN) > 8010) {
                     Component_Title_Label.setText("PIN must be a number in range [8000; 8010].");
                 } else {
                     sendRequest(Nickname, PIN);
