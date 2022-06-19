@@ -54,6 +54,7 @@ public class TrocaMsg extends Frame {
                     String pin_destino = chamadaWebservice(destinationNickName.trim()).trim();
                     System.out.println("O servidor respondeu à consulta: " + pin_destino);
                     if (pin_destino.contains("Erro")) {
+                        ecra_mostra_msg.append("Could not find user with nickname: " + destinationNickName);
                         System.out.println(pin_destino);
                     } else {
                         try {

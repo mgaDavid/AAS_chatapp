@@ -127,7 +127,7 @@ public class NameServerService {
     @GET
     @Path("/forgotpin")
     @Consumes("text/plain")
-    @Produces("text/plain")
+    @Produces("application/json")
     public String forgotPIN(@QueryParam("nick") String nick) {
 
         // Create part of the key that contains nickname
