@@ -85,7 +85,7 @@ public class NameServerService {
             String fileLine = readFile.readLine();
 
             while (fileLine != null && foundPIN == false) {
-                if (fileLine.split(",")[1].contains(pin)) {
+                if (fileLine.split(",")[1].equalsIgnoreCase(pin)) {
                     foundPIN = true;
                 }
                 fileLine = readFile.readLine();
@@ -147,7 +147,7 @@ public class NameServerService {
             String fileLine = readFile.readLine();
 
             while (fileLine != null && foundPIN == false) {
-                if (fileLine.contains(nickName)) {
+                if (fileLine.split(",")[0].equalsIgnoreCase(nickName)) {
                     foundPIN = true;
                     PIN = fileLine.split(",")[1];
                 }
