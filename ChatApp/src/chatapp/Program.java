@@ -7,7 +7,7 @@
 // Portanto:
 // TrocaMsg -> ServNomes (Web-Service REST/JSON)
 // TrocaMsg -> TrocaMsg  (DatagramSocket)
-package trocamsg;
+package chatapp;
 
 public class Program {
 

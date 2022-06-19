@@ -1,4 +1,4 @@
-package trocamsg;
+package chatapp;
 
 import java.net.*;
 import javax.crypto.Cipher;
@@ -6,36 +6,36 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
-public class Datagrama extends Thread {
+public class Datagram extends Thread {
 
-    private static final String palavra_passe = "ea6bdcc2c378";
-    private static SecretKey chave_secreta;
+    private static final String password = "ea6bdcc2c378";
+    private static SecretKey secretKey;
 
     InetAddress Sender;
     InetAddress Destination;
     DatagramSocket DatagramSocket;
     byte[] Buffer = new byte[1024];
 
-    TrocaMsg chat;
-    Integer port_number = null;
+    Chat chat;
+    Integer portNumber = null;
 
-    public Datagrama(Integer port_number) {
-        this.port_number = port_number;
+    public Datagram(Integer port_number) {
+        this.portNumber = port_number;
     }
 
     public void run() {
         try {
-            DatagramSocket = new DatagramSocket(port_number);
-            this.setSecretKey(palavra_passe);
+            DatagramSocket = new DatagramSocket(portNumber);
+            this.setSecretKey(password);
         } catch (Exception e) {
             e.printStackTrace();
         }
         while (true) {
-            recebeDatagrama();
+            receiveDatagram();
         }
     }
 
-    public void recebeDatagrama() {
+    public void receiveDatagram() {
         try {
             DatagramPacket DatagramPacket = new DatagramPacket(Buffer, Buffer.length);
             DatagramSocket.receive(DatagramPacket);
@@ -45,16 +45,16 @@ public class Datagrama extends Thread {
             String Message = new String(decrypted);
             System.out.println(Message);
 
-            chat.ecra_mostra_msg.append(Message);
-            chat.ecra_mostra_msg.append("\n");
+            chat.windowShowMessage.append(Message);
+            chat.windowShowMessage.append("\n");
         } catch (Exception e) {
-            System.out.println("Erro ao tentar receber datagrama.");
+            System.out.println("Error trying to receive datagram.");
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    public void enviaDatagrama(int Port, String Message, String Recipient) {
+    public void sendDatagram(int Port, String Message, String Recipient) {
         try {
             byte[] MessageBytes = Message.getBytes();
             Destination = InetAddress.getByName(Recipient);
@@ -74,33 +74,29 @@ public class Datagrama extends Thread {
             DatagramPacket DatagramPacket = new DatagramPacket(MessageBytes, MessageBytes.length, Destination, Port);
             DatagramSocket.send(DatagramPacket);
         } catch (Exception e) {
-            System.out.println("Erro ao tentar enviar datagrama.");
+            System.out.println("Error trying to send datagram.");
             e.printStackTrace();
         }
     }
 
-    // A implementação do DES não está terminada.
-    // Falta chamar o encryptDES() no método enviaDatagrama()
-    // E, por semelhança, falta chamar decryptDES() no recebeDatagrama()
-    // Isto é, cifrar a mensagem ao enviar, decifrar a mensagem ao receber
     private void setSecretKey(String Key) throws Exception {
         byte key[] = Key.getBytes("UTF8");
         DESKeySpec desKeySpec = new DESKeySpec(key);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
         SecretKey secretKey = keyFactory.generateSecret(desKeySpec);
-        chave_secreta = secretKey;
+        Datagram.secretKey = secretKey;
     }
 
     private byte[] encryptDES(byte[] message) throws Exception {
         Cipher desCipher = Cipher.getInstance("DES/ECB/NoPadding");
-        desCipher.init(Cipher.ENCRYPT_MODE, chave_secreta);
+        desCipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] encodedSTR = desCipher.doFinal(message);
         return encodedSTR;
     }
 
     private byte[] decryptDES(byte[] message) throws Exception {
         Cipher desCipher = Cipher.getInstance("DES/ECB/NoPadding");
-        desCipher.init(Cipher.DECRYPT_MODE, chave_secreta);
+        desCipher.init(Cipher.DECRYPT_MODE, secretKey);
         byte[] decodedSTR = desCipher.doFinal(message);
         return decodedSTR;
     }
